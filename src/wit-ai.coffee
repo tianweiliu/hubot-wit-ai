@@ -47,7 +47,10 @@ module.exports = (robot) ->
 			if json.outcomes.length > 0
 				for intent in json.outcomes
 					do(intent) ->
-						robot.emit "#{intent.intent}", intent.entities
-						console.log "emit event: #{intent.intent}, #{intent.entities}"
+						robot.emit "#{intent.intent}", {
+							res: res
+							entities: intent.entities
+						}
+						console.log "emit event: #{intent.intent}"
 			else
 				res.send "Sorry, could you please try to rephrase that in binary?"
