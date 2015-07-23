@@ -21,6 +21,6 @@ Then add **hubot-wit-ai** to your `external-scripts.json`:
 ## Sample Interaction
 
 ```
-user1>> hubot hello
-hubot>> hello!
+user1>> @hubot: hey what is the weather like tomorrow?
+(hubot send "what is the weather like tomorrow" to wit.ai and emit intent as event)
 ```
