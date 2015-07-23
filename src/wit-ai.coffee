@@ -5,7 +5,8 @@
 #   HUBOT_WIT_TOKEN
 #
 # Commands:
-#   hey (hey,) - <what the respond trigger does>
+#   hey hubot (hey hubot,) <dialog> - Ask me something. I may or may not understand you.
+#	hubot hey (hubot hey,) <dialog> - Ask me something. I may or may not understand you.
 #
 # Notes:
 #   response from wit.ai will trigger event with intent as the event name and entities in JSON object as parameters
@@ -14,9 +15,17 @@
 #   tianwei.liu <tianwei.liu@target.com>
 
 module.exports = (robot) ->
-	robot.respond /hey[, ](.*)/i, (res) ->
-		query = res.match[1]
+	robot.respond /hey(, | )(.*)/i, (res) ->
+		query = res.match[2]
 		console.log "query: #{query}"
+		askWit(query, res)
+
+	robot.hear ///hey\s+#{robot.name}(,\s+|\s+)(.*)///i, (res) ->
+		query = res.match[2]
+		console.log "query: #{query}"
+		askWit(query, res)
+
+	askWit = (query, res) ->
 		unless process.env.HUBOT_WIT_TOKEN?
 			res.send "i am not on wit's friendlist yet. :("
 			console.log "HUBOT_WIT_TOKEN not set"
@@ -35,7 +44,10 @@ module.exports = (robot) ->
 			# got response back, routing
 			json = JSON.parse(body)
 			console.log "wit response: #{body}"
-			for intent in json.outcomes
-				do(intent) ->
-					robot.emit "#{intent.intent}", intent.entities
-					console.log "emit event: #{intent.intent}, #{intent.entities}"
+			if json.outcomes.length > 0
+				for intent in json.outcomes
+					do(intent) ->
+						robot.emit "#{intent.intent}", intent.entities
+						console.log "emit event: #{intent.intent}, #{intent.entities}"
+			else
+				res.send "Sorry, could you please try to rephrase that in binary?"
