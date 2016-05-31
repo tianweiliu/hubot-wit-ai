@@ -2,7 +2,8 @@
 #   A hubot wit.ai router
 #
 # Configuration:
-#   HUBOT_WIT_TOKEN
+#   HUBOT_WIT_TOKEN=SERVER_TOKEN
+#   HUBOT_WIT_VERSION=20160527 (specify your version)
 #
 # Commands:
 #   hey hubot (hey hubot,) <dialog> - Ask me something. I may or may not understand you.
@@ -31,7 +32,7 @@ module.exports = (robot) ->
 			console.log "HUBOT_WIT_TOKEN not set"
 			return
 
-		robot.http("https://api.wit.ai/message?q=#{encodeURI(query)}")
+		robot.http("https://api.wit.ai/message?v=#{process.env.HUBOT_WIT_VERSION}&q=#{encodeURI(query)}")
 		.header('Content-Type', 'application/json')
 		.header('Authorization', 'Bearer ' + process.env.HUBOT_WIT_TOKEN)
 		.header('Accept', 'application/vnd.wit.20141022+json')
