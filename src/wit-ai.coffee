@@ -3,7 +3,7 @@
 #
 # Configuration:
 #   HUBOT_WIT_TOKEN=SERVER_TOKEN
-#   HUBOT_WIT_VERSION=20160527 (specify your version)
+#   HUBOT_WIT_VERSION=20160511 (specify your version)
 #
 # Commands:
 #   hey hubot (hey hubot,) <dialog> - Ask me something. I may or may not understand you.
@@ -35,7 +35,7 @@ module.exports = (robot) ->
 		robot.http("https://api.wit.ai/message?v=#{process.env.HUBOT_WIT_VERSION}&q=#{encodeURI(query)}")
 		.header('Content-Type', 'application/json')
 		.header('Authorization', 'Bearer ' + process.env.HUBOT_WIT_TOKEN)
-		.header('Accept', 'application/vnd.wit.20141022+json')
+#		.header('Accept', 'application/vnd.wit.20141022+json') legacy version in header
 		.get() (err, r, body) ->
 			if err
 				res.send "Wit needs coffee :| #{err}"
